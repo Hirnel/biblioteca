@@ -28,4 +28,3 @@ Este proyecto está pensado para crecer y ofrecer más funcionalidades a la comu
 🔥 Future Features con Firebase: Se añadirá Firebase para manejar autenticación y almacenamiento de datos de usuarios.
 🤝 Contribución
 Si deseas contribuir, por favor haz un fork del proyecto, realiza tus cambios y crea un pull request. También puedes abrir un issue para sugerencias de mejoras.
-
