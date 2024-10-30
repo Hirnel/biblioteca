@@ -1,104 +1,128 @@
 //       key API      gozT5WEjT27NXpLIzQoXassq8w2nSUU4
-//      'https://api.nytimes.com/svc/books/v3/lists/names.json?api-key=gozT5WEjT27NXpLIzQoXassq8w2nSUU4'
+//      'https://api.nytimes.com/svc/books/v3/lists/names.json?api-key=${apiKey}'
+//       ${apiKey}
+
+const apiKey = "gozT5WEjT27NXpLIzQoXassq8w2nSUU4";
+
+//https://api.nytimes.com/svc/books/v3/lists/full-overview.json?api-key=gozT5WEjT27NXpLIzQoXassq8w2nSUU4
+//https://api.nytimes.com/svc/books/v3/lists/names.json?api-key=gozT5WEjT27NXpLIzQoXassq8w2nSUU4
+
+// async function obtainData() {
+//     let response = await fetch(`https://api.nytimes.com/svc/books/v3/lists/names.json?api-key=${apiKey}`);
+//     let data = await response.json();
+
+//     return data.results;
+// }
+
+// Esto es solo para trabajar con la API en local
+async function obtainData() {
+    return libros;
+}
+ 
 
 
+obtainData()
+// Función para cargar todas las listas en el DOM
+async function createCardsDom() {
+    let datos = await obtainData();
+    let section = document.body.querySelector("#listsContainer")
+    let header = document.body.querySelector("#buttonBackContainer")
 
-// Función para obtener los datos de la API
-async function getLibros(url) {
-    try {
-        // Llamada a la API usando fetch
-        console.log("Iniciando la llamada a la API");
-        let response = await fetch(url); // Realiza la solicitud a la API
+    datos.forEach(list => {
+
+        section.innerHTML += `
+        <article>
+        <div class='tarjetalista'>
+        <h3>${list.list_name}</h3>
+        <p>Oldest: ${list.oldest_published_date}</p>
+        <p>Newest: ${list.newest_published_date}</p>
+        <p>Updated: ${list.updated.toLowerCase()}</p>
+        <button class ='cargarLista' id="${list.list_name}">
+        <span> READ MORE </span>
+        </div>
         
-        // Verifica si la respuesta es exitosa
-        if (!response.ok) throw new Error("Error al obtener los datos");
-        
-        // Convierte la respuesta a formato JSON
-        let datos = await response.json();
-        console.log("Datos obtenidos:", datos); // Muestra los datos en la consola para verificar
-        return datos; // Devuelve los datos para que otra función los procese
-    } catch (error) {
-        // Manejo de errores en caso de que la solicitud falle
-        console.error("Error:", error);
-    }
+        </button>
+        </article>`
+            ;
+
+    })
+    document.querySelectorAll(".cargarLista").forEach(button => {
+        button.addEventListener("click", async function () {
+            let id = this.getAttribute("id");
+            let datosLista = await fetch(`https://api.nytimes.com/svc/books/v3/lists/${id}.json?api-key=${apiKey}`)
+            let data = await datosLista.json();
+
+            section.innerHTML = ""//para limpiar el dom
+            header.innerHTML = `
+                <button class ='backButton' onclick="window.location.reload()">Back to lists</button>
+                `
+
+            //mismo procedimiento anterior:
+            data.results.books.forEach(book => {
+
+                section.innerHTML += `
+                
+                <div class='tarjetalibro'>
+                <h4>#${book.rank} ${book.title}</h4>
+                <div class="caratula">
+                <img src=${book.book_image}></img>
+                </div>
+                <p>Weeks on the list: ${book.weeks_on_list}</p>
+                <p>Description: ${book.description}</p>
+                
+                <button class ='comprarAmazon' onclick=window.open("${book.amazon_product_url}")>
+                BUY NOW
+                
+                </button>
+                `
+            })
+        })
+    })
+}
+createCardsDom();
+
+async function generarInfoLista() {
+    let datos = await fetch();
+
+
 }
 
-// Función para pintar los datos obtenidos en el DOM
-function pintarLibros(datos) {
-    // Selecciona el contenedor donde se van a mostrar los datos
-    let datosLibros = document.getElementById("datosLibros");
-    
-    // Limpia el contenido previo antes de pintar nuevos datos
-    datosLibros.innerHTML = ""; 
+// async function obtainData() {
+//     let response = await fetch(`https://api.nytimes.com/svc/books/v3/lists/names.json?api-key=${apiKey}`);
+//     let data = await response.json();
+//     let resultados = data.results;
+//     let name;
+//     let dateOld;
+//     let dateLast;
+//     let dateUpdate;
+//     let link;
+//     resultados.forEach((resultado) => {
+//         name = resultado.list_name;
+//         dateOld = resultado.oldest_published_date;
+//         dateLast = resultado.newest_published_date;
 
-    console.log("Iniciando la función pintarLibros"); // Verifica que la función se llama
-    if (datos && datos.results) { // Comprueba que existen datos válidos
-        // Itera sobre cada elemento de la lista en los resultados de la API
-        datos.results.forEach(item => {
-            let listName = item.list_name;  // Título de la lista de libros
-            let displayName = item.display_name;  // Nombre que se muestra
-            let list_name_encoded = item.list_name_encoded;
-            let imageUrl = item.book_image; // URL de la imagen del libro (asegúrate de que esta propiedad exista en la API)
-            let amazonLink = item.amazon_product_url; 
 
-            //let imgSRC = (book_image) ? book_image : `../assets/img/imgDefault.jpg`
 
-            let libroDiv = document.createElement("div");
+//     });
 
-            libroDiv.innerHTML = `
-                <strong>Nombre de la lista:</strong> ${listName}<br>
-                <strong>Nombre para mostrar:</strong> ${displayName}<br>
-                <a href="#" onclick="mostrarLibros('${list_name_encoded}')">${listName}</a>
-            `;
 
-        
-            // Agrega el div al contenedor principal
-            datosLibros.appendChild(libroDiv);
-        });
-    } else {
-        // Mensaje en caso de que no se encuentren datos
-        datosLibros.innerHTML = "No se encontraron datos de libros.";
-    }
+
+
+// }
+
+// const spinner = async () => {
+//     return new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//         resolve;
+//     });
+//   });   
+// }
+
+obtainData();
+
+async function createCards() {
+
+
+
+
 }
-//  `https://api.nytimes.com/svc/books/v3/lists/current/${valor}.json?api-key=${api_key}`
-
-async function mostrarLibros(url) {
-    try {
-        // Llamada a la API usando fetch
-        let response = await fetch(url); // Realiza la solicitud a la API
-        
-        // Verifica si la respuesta es exitosa
-        if (!response.ok) throw new Error("Error al obtener los datos");
-        
-        // Convierte la respuesta a formato JSON
-        let datos = await response.json();
-        console.log("Datos obtenidos:", datos); // Muestra los datos en la consola para verificar
-        return datos; // Devuelve los datos para que otra función los procese
-    } catch (error) {
-        // Manejo de errores en caso de que la solicitud falle
-        console.error("Error:", error);
-    }
-}
-
-// Evento que se activa al hacer clic en el botón "Cargar Libros"
-document.getElementById("fetchData").addEventListener("click", () => {
-    console.log("Botón 'Cargar Libros' fue clickeado"); // Mensaje de confirmación en la consola
-    
-    // Llama a la función getLibros con la URL de la API y clave incluida
-    getLibros('https://api.nytimes.com/svc/books/v3/lists/names.json?api-key=gozT5WEjT27NXpLIzQoXassq8w2nSUU4')
-        .then(datos => {
-            // Si hay datos válidos, llama a pintarLibros para mostrarlos en el DOM
-            if (datos) {
-                pintarLibros(datos);
-            } else {
-                console.log("No se obtuvieron datos para pintar.");
-            }
-        });
-});
-
-
-/*
-Tengo que crear list_name_encoded
-<img src="${imageUrl}" alt="Carátula del libro ${displayName}" width="100" height="150">
-
-*/
