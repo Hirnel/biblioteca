@@ -1,5 +1,3 @@
-
-![alt text](image.png)
 📚 New York Times Best Sellers - Web App
 📝 Descripción
 Esta es una web responsive que muestra las listas de los libros más vendidos del New York Times. La aplicación obtiene los datos de una API externa y presenta los libros de forma organizada, permitiendo a los usuarios explorar distintas listas y descubrir los títulos más populares.
