@@ -14,6 +14,7 @@ Esta es una web responsive que muestra las listas de los libros más vendidos de
 
 🎨 Colores del New York Times: Todo el diseño de la web está inspirado en los colores clásicos y elegantes del New York Times para crear una experiencia visual coherente y profesional. Los colores utilizados incluyen tonos como #2d426e, #202c4d, y #c9ada9 que recuerdan la estética de la marca.
 ![alt text](image.png)
+
 💻 Desarrollo Local
 Para optimizar el desarrollo, se ha utilizado una copia local de la API. Esto permite trabajar sin hacer peticiones constantes al servidor, mejorando la velocidad de desarrollo y evitando límites de uso en la API.
 
